@@ -1,0 +1,20 @@
+.section {
+    margin-left: 10%;
+    float:left;
+}
+.photo {
+    padding-right: 5px;
+}
+
+.red {
+    color: red;
+}
+
+.bold_red {
+    font-weight: bold;
+    color: red;
+}
+
+.highlight {
+    background: greenyellow;
+}

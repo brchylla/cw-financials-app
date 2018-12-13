@@ -1,6 +1,9 @@
 package com.cw.util;
 
 import java.net.UnknownHostException;
+import java.util.Arrays;
+
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
@@ -9,6 +12,9 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 
 /**
  * This class was found on http://techidiocy.com/sample-collection-documents-mongoutils-java/
@@ -16,7 +22,7 @@ import com.mongodb.MongoClient;
  */
 public class MongoUtils {
 
-    private static final String DATABASE_NAME="test";
+    private static final String DATABASE_NAME="cw-financials-app";
     private static final String DEFAULT_COLLECTION_NAME="mutualFund";
     private static MongoClient serverConnection = null;
 
@@ -24,10 +30,11 @@ public class MongoUtils {
     public static DBCollection getCollection(String collectionName) {
         if(serverConnection==null){
             try {
-                serverConnection = new MongoClient("localhost",27017);
+            	MongoClientURI uri = new MongoClientURI("mongodb://brchylla:BuckyBen94!@ds229415.mlab.com:29415/cw-financials-app");
+            	serverConnection = new MongoClient(uri);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Not able to connect to localhost");
+                throw new RuntimeException("Not able to connect to ds229415.mlab.com");
             }
         }
         DB db = serverConnection.getDB(DATABASE_NAME);

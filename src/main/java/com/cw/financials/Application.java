@@ -35,7 +35,8 @@ public class Application implements CommandLineRunner {
 
 
     public static void main(String[] args) throws Exception{
-        SpringApplication.run(Application.class, args);
+        //SpringApplication.run(Application.class, args);
+    	System.out.println("Hello World!");
     }
 
     public void run(String[] args) {

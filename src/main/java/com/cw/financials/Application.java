@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URL;
@@ -35,6 +36,12 @@ public class Application implements CommandLineRunner {
 
     private static final String mutualFundURL = "ftp://ftp.nasdaqtrader.com/symboldirectory/mfundslist.txt";
 
+    /* Copied from MainController.java */
+    @RequestMapping(value="/",method = RequestMethod.GET)
+    public String homepage(){
+        return "index.html";
+    }
+    
     public static void main(String[] args) throws Exception{
         System.out.println("Hello World!");
     	SpringApplication.run(Application.class, args);

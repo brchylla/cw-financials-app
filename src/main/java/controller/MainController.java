@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class MainController {
     
-	private static final String PATH = "/";
-	
-	@RequestMapping(value=PATH,method = RequestMethod.GET)
+	@RequestMapping(value="/",method = RequestMethod.GET)
     public String homepage(){
         return "index.html";
     }

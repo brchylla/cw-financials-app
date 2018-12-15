@@ -45,12 +45,12 @@ public class Application implements CommandLineRunner {
         SpringApplication.run(Application.class, args);
     }
 
-    /*public void run(String[] args) {
+    public void run(String[] args) {
         try {
             mfService.syncMutualFundsAsync(new URL(mutualFundURL), Duration.ofHours(1));
         } catch( Exception e ) {
             e.printStackTrace();
         }
-    }*/
+    }
 }
 

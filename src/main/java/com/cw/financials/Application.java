@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URL;
 import java.time.Duration;
@@ -33,10 +35,14 @@ public class Application implements CommandLineRunner {
 
     private static final String mutualFundURL = "ftp://ftp.nasdaqtrader.com/symboldirectory/mfundslist.txt";
 
+    @RequestMapping("/")
+    @ResponseBody
+    String home() {
+      return "Hello World!";
+    }
 
     public static void main(String[] args) throws Exception{
-        //SpringApplication.run(Application.class, args);
-    	System.out.println("Hello World!");
+        SpringApplication.run(Application.class, args);
     }
 
     public void run(String[] args) {

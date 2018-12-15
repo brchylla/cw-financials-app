@@ -35,14 +35,9 @@ public class Application implements CommandLineRunner {
 
     private static final String mutualFundURL = "ftp://ftp.nasdaqtrader.com/symboldirectory/mfundslist.txt";
 
-    @RequestMapping("/")
-    @ResponseBody
-    String home() {
-      return "Hello World!";
-    }
-
     public static void main(String[] args) throws Exception{
-        SpringApplication.run(Application.class, args);
+        System.out.println("Hello World!");
+    	SpringApplication.run(Application.class, args);
     }
 
     public void run(String[] args) {

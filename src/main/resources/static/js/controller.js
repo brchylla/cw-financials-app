@@ -77,7 +77,7 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                         }
                     }
                     else {
-                        $scope.pdNotAvailable = true;
+                        $scope.noPDExists = true;
                     }
                 }
                 i++;

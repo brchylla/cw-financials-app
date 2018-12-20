@@ -58,14 +58,27 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
             success(function(data) {
                 // expects to return price quote from symbol query
                 var priceQuote = data;
-                if (priceQuote.completed == true) {
+                if (priceQuote.completed == true && priceQuote.intervals != null) {
                     PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
                     $interval.cancel(promise);
                     $scope.loadingPD = false;
                 }
                 else if (i == maxQueries - 1) {
-                    $scope.pdNotAvailable = true;
                     $scope.loadingPD = false;
+                    if (priceQuote != null && priceQuote.intervals != null) {
+                        while (priceQuote.intervals[0] == null || priceQuote.intervals[0] === undefined) {
+                            priceQuote.intervals.shift();
+                        }
+                        if (priceQuote.intervals.length > 0) {
+                            PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
+                        }
+                        else {
+                            $scope.pdNotAvailable = true;
+                        }
+                    }
+                    else {
+                        $scope.pdNotAvailable = true;
+                    }
                 }
                 i++;
             }).error(function() {

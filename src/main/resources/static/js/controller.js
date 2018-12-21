@@ -69,7 +69,6 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                                 priceQuote.intervals.shift();
                             }
                             if (priceQuote.intervals.length > 0) {
-                                $scope.loadingPD = false;
                                 PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
                             }
                             else {

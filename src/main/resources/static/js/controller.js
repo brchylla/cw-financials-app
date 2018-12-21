@@ -50,7 +50,7 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
         $scope.selectedSymbol = symbol;
         // query maximum # of times to try to get price quote with complete data
         $scope.startDate = '2018-01-01';
-        var i = 0;
+        var i = 1;
         var MAX_QUERIES = 10;
         var promise = $interval(function() {
             $http.get('/query/priceQuote?symbol=' + $scope.selectedSymbol +
@@ -76,7 +76,7 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                             }
                         }
                     }
-                    if (i == MAX_QUERIES) {
+                    if (i >= MAX_QUERIES) {
                         $scope.loadingPD = false;
                         if (priceQuote == null || priceQuote.intervals == null) {
                             $scope.noPDExists = true;

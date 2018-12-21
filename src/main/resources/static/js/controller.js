@@ -49,43 +49,46 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
         PDGraphService.ClearGraph();
         $scope.selectedSymbol = symbol;
         // query maximum # of times to try to get price quote with complete data
-        var maxQueries = 10;
         $scope.startDate = '2018-01-01';
         var i = 0;
+        var MAX_QUERIES = 10;
         var promise = $interval(function() {
-            $http.get('/query/priceQuote?symbol=' + $scope.selectedSymbol + 
+            $http.get('/query/priceQuote?symbol=' + $scope.selectedSymbol +
             '&startDate=' + $scope.startDate).
             success(function(data) {
-                // expects to return price quote from symbol query
-                var priceQuote = data;
-                if (priceQuote.completed == true && priceQuote.intervals != null) {
-                    PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
-                    $interval.cancel(promise);
-                    $scope.loadingPD = false;
-                }
-                else if (i == maxQueries - 1) {
-                    $scope.loadingPD = false;
-                    if (priceQuote != null && priceQuote.intervals != null) {
-                        while (priceQuote.intervals[0] == null || priceQuote.intervals[0] === undefined) {
-                            priceQuote.intervals.shift();
-                        }
-                        if (priceQuote.intervals.length > 0) {
-                            PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
-                        }
-                        else {
-                            $scope.pdNotAvailable = true;
+                    // expects to return price quote from symbol query
+                    var priceQuote = data;
+                    if (priceQuote.completed == true && priceQuote.intervals != null) {
+                        $scope.loadingPD = false;
+                        PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
+                        $interval.cancel(promise);
+                    }
+                    else if (i % 2 == 0) {
+                        if (priceQuote != null && priceQuote.intervals != null) {
+                            while (priceQuote.intervals[0] == null || priceQuote.intervals[0] === undefined) {
+                                priceQuote.intervals.shift();
+                            }
+                            if (priceQuote.intervals.length > 0) {
+                                $scope.loadingPD = false;
+                                PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
+                            }
+                            else {
+                                $scope.pdNotAvailable = true;
+                            }
                         }
                     }
-                    else {
-                        $scope.noPDExists = true;
+                    if (i == MAX_QUERIES) {
+                        $scope.loadingPD = false;
+                        if (priceQuote == null || priceQuote.intervals == null) {
+                            $scope.noPDExists = true;
+                        }
                     }
-                }
-                i++;
-            }).error(function() {
-                $scope.noPDExists = true;
-                $scope.loadingPD = false;
-            });
-        }, 1000, [maxQueries]);
+                    i++;
+                }).error(function() {
+                    $scope.noPDExists = true;
+                    $scope.loadingPD = false;
+                });
+            }, 1000, [MAX_QUERIES]);
     }
 
     function getCount() {

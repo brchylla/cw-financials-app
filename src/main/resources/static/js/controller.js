@@ -51,23 +51,24 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
         // query maximum # of times to try to get price quote with complete data
         $scope.startDate = '2018-01-01';
         var i = 1;
-        var MAX_QUERIES = 10;
+        var MAX_QUERIES = 20;
         var promise = $interval(function() {
             $http.get('/query/priceQuote?symbol=' + $scope.selectedSymbol +
             '&startDate=' + $scope.startDate).
             success(function(data) {
                     // expects to return price quote from symbol query
                     var priceQuote = data;
-                    if (priceQuote.completed == true && priceQuote.intervals != null) {
+                    if (priceQuote.completed == true ||
+                         (priceQuote.intervals != null &&
+                          priceQuote.intervals[0] != null &&
+                          priceQuote.intervals[0].startDate.indexOf('-01-') >= 0 &&
+                          Number(priceQuote.intervals[0].startDate.slice(-2)) <= 7)) {
                         $scope.loadingPD = false;
                         PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
                         $interval.cancel(promise);
                     }
                     else if (i % 2 == 0) {
                         if (priceQuote != null && priceQuote.intervals != null) {
-                            while (priceQuote.intervals[0] == null || priceQuote.intervals[0] === undefined) {
-                                priceQuote.intervals.shift();
-                            }
                             if (priceQuote.intervals.length > 0) {
                                 PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
                             }
@@ -76,11 +77,12 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                             }
                         }
                     }
-                    if (i >= MAX_QUERIES) {
+                    if (i >= MAX_QUERIES || (i >= MAX_QUERIES/2 && priceQuote.intervals == null)) {
                         $scope.loadingPD = false;
                         if (priceQuote == null || priceQuote.intervals == null) {
                             $scope.noPDExists = true;
                         }
+                        $interval.cancel(promise);
                     }
                     i++;
                 }).error(function() {
@@ -188,6 +190,9 @@ app.controller('pdTableController', ['$scope', 'PDGraphService', function($scope
         $scope.pdiArray = [];
         $scope.noPDExists = false;
         var priceHistory = data.data;
+        while (priceHistory.intervals[0] == null || priceHistory.intervals[0] === undefined) {
+            priceHistory.intervals.shift();
+        }
         $scope.symbol = data.symbol;
         $scope.pdiArray = priceHistory.intervals;
         if ($scope.pdiArray != null) {

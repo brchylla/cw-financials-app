@@ -71,8 +71,8 @@ class GroupNameLookup {
 
     public String toEnumFormat(String htmlName) {
         String newValue = "";
-        if ( htmlName == null) {
-            return newValue;
+        if (htmlName == null || htmlName.trim().length() == 0) {
+            return CategoryName.NAME_UNKNOWN.toString();
         }
         String[] words = htmlName.split(" |-|/");
         for (int i = 0; i < words.length; i++) {
@@ -129,7 +129,7 @@ class GroupNameLookup {
      */
     public static boolean isNumeric(String str) {
         try {
-            double test = Double.parseDouble(str);
+            Double.parseDouble(str);
         }
         catch(NumberFormatException nfe)
         {

@@ -30,7 +30,7 @@ public class MongoUtils {
     public static DBCollection getCollection(String collectionName) {
         if(serverConnection==null){
             try {
-            	MongoClientURI uri = new MongoClientURI("mongodb://brchylla:Bridgeout5@ds229415.mlab.com:29415/cw-financials-app");
+            	MongoClientURI uri = new MongoClientURI("mongodb://brchylla:BuckyBen94!@ds229415.mlab.com:29415/cw-financials-app");
             	serverConnection = new MongoClient(uri);
             } catch (UnknownHostException e) {
                 e.printStackTrace();

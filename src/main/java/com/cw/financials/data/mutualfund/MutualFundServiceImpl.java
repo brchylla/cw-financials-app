@@ -223,14 +223,14 @@ public class MutualFundServiceImpl implements MutualFundService {
 
     static String getCategoryGroup(String categoryName, GroupNameLookup lookup) {
         // special case for fund with Target Date category
-        if (categoryName.contains("TARGET_DATE")) {
+    	if (categoryName == null || categoryName.trim().length() == 0) {
+            return CategoryGroup.GROUP_UNKNOWN.toString();
+        }
+    	else if (categoryName.contains("TARGET_DATE")) {
             return CategoryGroup.ALLOCATION.toString();
         }
         else if (categoryName.contains("ALLOCATION")) {
             return CategoryGroup.ALLOCATION.toString();
-        }
-        else if (categoryName == null || categoryName.equals("")) {
-            return CategoryGroup.GROUP_UNKNOWN.toString();
         }
         else {
             CategoryName name;

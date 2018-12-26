@@ -7,12 +7,12 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 
 public class PriceHistory {
-	String symbol;
-	Date beginningDate;
-	Date endDate;
-	int intervalDays;
-	boolean completed;
-	PriceDataInterval[] intervals;
+	private String symbol;
+	private Date beginningDate;
+	private Date endDate;
+	private int intervalDays;
+	private boolean completed;
+	private PriceDataInterval[] intervals;
 	
 	// format for displaying beginning and end dates
     static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,9 +67,9 @@ public class PriceHistory {
 					&& intervals[i+1] != null 
 					&& intervals[i+1].getMean() != 0) {
 				PriceDataInterval prev = intervals[i+1];
-				float increase = curr.getMean() - prev.getMean();
+				float difference = curr.getMean() - prev.getMean();
 				float midpoint = 0.5f * (curr.getMean() + prev.getMean());
-				float percentChange = (increase / midpoint) * 100;
+				float percentChange = (difference / midpoint) * 100;
 				curr.setPercentChange(percentChange);
 			}
 		}

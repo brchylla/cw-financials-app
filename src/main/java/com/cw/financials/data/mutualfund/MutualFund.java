@@ -153,13 +153,4 @@ public class MutualFund {
                 "MutualFund[fundSymbol=%s, fundName='%s', categoryName='%s', categoryGroup='%s']",
                 fundSymbol, fundName, categoryName, categoryGroup);
     }
-
-    /**
-     * Returns the CategoryGroup instance mapped to the specified name
-     * @param name  CategoryName value
-     * @return      Group mapped to this name
-     */
-    public static final CategoryGroup getGroupForName(CategoryName name) {
-        return CategoryGroup.GROUP_UNKNOWN;
-    }
 }

@@ -58,8 +58,9 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
             success(function(data) {
                     // expects to return price quote from symbol query
                     var priceQuote = data;
-                    if (priceQuote.completed == true ||
-                         (priceQuote.intervals != null &&
+                    // finish & display graph if price quote intervals are received
+                    // from 1st week of January to present
+                    if ((priceQuote.intervals != null &&
                           priceQuote.intervals[0] != null &&
                           priceQuote.intervals[0].startDate.indexOf('-01-') >= 0 &&
                           Number(priceQuote.intervals[0].startDate.slice(-2)) <= 7)) {
@@ -67,6 +68,7 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                         PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
                         $interval.cancel(promise);
                     }
+                    // for every other request returned, update graph if intervals are available
                     else if (i % 2 == 0) {
                         if (priceQuote != null && priceQuote.intervals != null) {
                             if (priceQuote.intervals.length > 0) {
@@ -77,11 +79,25 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                             }
                         }
                     }
-                    if (i >= MAX_QUERIES || (i >= MAX_QUERIES/2 && priceQuote.intervals == null)) {
+                    // cancel intervals and display status if price quote is completed,
+                    // all requests are finished,
+                    // or half of the requests are finished and no price data has been found
+                    if (priceQuote.completed == true || i >= MAX_QUERIES) {
                         $scope.loadingPD = false;
-                        if (priceQuote == null || priceQuote.intervals == null) {
+                        if (priceQuote == null || priceQuote.intervals == null
+                            || priceQuote.intervals.length == 0) {
                             $scope.noPDExists = true;
                         }
+                        else {
+                            $scope.pdNotAvailable = true;
+                        }
+                        $interval.cancel(promise);
+                    }
+                    else if (i >= MAX_QUERIES/2 &&
+                             (priceQuote == null || priceQuote.intervals == null ||
+                              priceQuote.intervals.length == 0)) {
+                        $scope.loadingPD = false;
+                        $scope.noPDExists = true;
                         $interval.cancel(promise);
                     }
                     i++;

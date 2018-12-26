@@ -62,7 +62,7 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                     // from 1st week of January to present
                     if ((priceQuote.intervals != null &&
                           priceQuote.intervals[0] != null &&
-                          priceQuote.intervals[0].startDate.indexOf('-01-') >= 0 &&
+                          priceQuote.intervals[0].startDate.indexOf('2018-01-') >= 0 &&
                           Number(priceQuote.intervals[0].startDate.slice(-2)) <= 7)) {
                         $scope.loadingPD = false;
                         PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);

@@ -1,7 +1,7 @@
 # CW Financials App
 Hi, my name is Benjamin Chylla. I have developed this application to practice my full-stack development skills and to demonstrate my expertise in Java, Spring, AngularJS, MongoDB, Apache Maven, and HTML/CSS. It is a finance app which gathers and displays mutual find information from an online source, and allows users to find and select mutual funds to display their price data.
 
-Instructions and requirements for deploying the program are provided below:
+The app has recently been deployed via Heroku at `cw-financials-app.herokuapp.com`. If you would like to deploy the program via the source code, instructions and requirements are provided below:
 
 # Server Requirements
 The server running the web application must have the following technologies installed:  

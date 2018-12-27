@@ -48,8 +48,15 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
         $scope.loadingPD = true;
         PDGraphService.ClearGraph();
         $scope.selectedSymbol = symbol;
+        // get price data starting at one year before current date, or 2018-01-01 if more recent
+        var now = new Date();
+        var oneYearBeforeNow = new Date();
+        oneYearBeforeNow.setFullYear(now.getFullYear()-1);
+        var janFirst2018 = new Date(2018, 0, 1);
+        var beginningDate = oneYearBeforeNow.getTime() > janFirst2018.getTime() ?
+                                          oneYearBeforeNow : janFirst2018;
+        $scope.startDate = beginningDate.toISOString().split('T')[0];
         // query maximum # of times to try to get price quote with complete data
-        $scope.startDate = '2018-01-01';
         var i = 1;
         var MAX_QUERIES = 20;
         var promise = $interval(function() {
@@ -74,9 +81,9 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                             if (priceQuote.intervals.length > 0) {
                                 PDGraphService.CreateGraph(priceQuote, $scope.selectedSymbol);
                             }
-                            else {
+                            /*else {
                                 $scope.pdNotAvailable = true;
-                            }
+                            }*/
                         }
                     }
                     // cancel intervals and display status if price quote is completed,
@@ -88,12 +95,12 @@ app.controller('multiMFTableController', ['$scope', '$http', '$interval', 'Pager
                             || priceQuote.intervals.length == 0) {
                             $scope.noPDExists = true;
                         }
-                        else {
+                        /*else {
                             $scope.pdNotAvailable = true;
-                        }
+                        }*/
                         $interval.cancel(promise);
                     }
-                    else if (i >= MAX_QUERIES/2 &&
+                    else if (i >= MAX_QUERIES/4 &&
                              (priceQuote == null || priceQuote.intervals == null ||
                               priceQuote.intervals.length == 0)) {
                         $scope.loadingPD = false;
